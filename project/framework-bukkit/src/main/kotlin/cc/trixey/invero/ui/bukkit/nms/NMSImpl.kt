@@ -8,9 +8,11 @@ import org.bukkit.craftbukkit.v1_16_R3.util.CraftChatMessage
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import taboolib.library.reflex.Reflex.Companion.getProperty
+import taboolib.library.reflex.Reflex.Companion.setProperty
 import taboolib.library.reflex.Reflex.Companion.unsafeInstance
 import taboolib.module.nms.MinecraftVersion.isUniversal
 import taboolib.module.nms.MinecraftVersion.majorLegacy
+import taboolib.module.nms.sendBundlePacketBlocking
 import taboolib.module.nms.sendPacketBlocking
 
 /**
@@ -115,6 +117,22 @@ class NMSImpl : NMS {
         }
     }
 
+    override fun sendWindowSetSlots(player: Player, containerId: Int, items: Map<Int, ItemStack?>) {
+        val packets = items.map { (slot, itemStack) ->
+            PacketPlayOutSetSlot::class.java.unsafeInstance().apply {
+                mapOf(
+                    "containerId" to containerId,
+                    "slot" to slot,
+                    "itemStack" to itemStack.asNMSCopy(),
+                    "stateId" to -1,
+                ).forEach {
+                    setProperty(it.key, it.value)
+                }
+            }
+        }
+        player.sendBundlePacketBlocking(packets)
+    }
+
     override fun sendWindowUpdateData(player: Player, containerId: Int, property: WindowProperty, value: Int) {
         PacketPlayOutWindowData(containerId, property.index, value).let {
             player.sendPacketBlocking(it)
@@ -127,7 +145,7 @@ class NMSImpl : NMS {
 
     override fun getContainerId(player: Player): Int {
         player as CraftPlayer
-        return  if (isUniversal) {
+        return if (isUniversal) {
             player.handle.getProperty<Container>("containerMenu")!!.getProperty<Int>("containerId")!!
         } else {
             player.handle.activeContainer.windowId

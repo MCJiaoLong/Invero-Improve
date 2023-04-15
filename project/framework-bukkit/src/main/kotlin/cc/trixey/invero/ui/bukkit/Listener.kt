@@ -2,7 +2,6 @@ package cc.trixey.invero.ui.bukkit
 
 import cc.trixey.invero.ui.bukkit.api.dsl.viewer
 import cc.trixey.invero.ui.bukkit.api.findWindow
-import cc.trixey.invero.ui.bukkit.api.registeredWindows
 import cc.trixey.invero.ui.bukkit.nms.persistContainerId
 import cc.trixey.invero.ui.bukkit.nms.sendCancelCoursor
 import cc.trixey.invero.ui.bukkit.util.copyUIMarked
@@ -13,7 +12,6 @@ import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.inventory.*
 import org.bukkit.event.player.PlayerChangedWorldEvent
 import org.bukkit.event.player.PlayerPickupItemEvent
-import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.ItemStack
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
@@ -55,7 +53,11 @@ object Listener {
     fun e(e: InventoryDragEvent) = e.delegatedEvent { handleDrag(e) }
 
     @SubscribeEvent
-    fun e(e: InventoryOpenEvent) = e.delegatedEvent { handleOpenEvent(e) }
+    fun e(e: InventoryOpenEvent) {
+        if (!e.delegatedEvent { handleOpenEvent(e) }) {
+            (e.player as Player).updateInventory()
+        }
+    }
 
     @SubscribeEvent
     fun e(e: InventoryCloseEvent) = e.delegatedEvent { handleCloseEvent(e) }
@@ -64,7 +66,9 @@ object Listener {
         val holder = it.holder
         if (holder is InventoryVanilla.Holder) {
             (holder.window.inventory as InventoryVanilla).block()
+            return@let true
         }
+        return@let false
     }
 
     @SubscribeEvent
@@ -83,13 +87,21 @@ object Listener {
             }
 
             "PacketPlayInWindowClick" -> {
-                packet.read<Int>(FILEDS_WINDOW_CLICK[0]).let { if (it != persistContainerId) return }
-                val window = viewer.viewingPacketWindow() ?: return
+                val inventory = viewer.viewingWindow()?.inventory ?: return
+
+                if (inventory is InventoryVanilla && inventory.hidePlayerInventory) {
+                    submit(now = true) { inventory.updatePlayerInventory() }
+                    return
+                } else {
+                    packet.read<Int>(FILEDS_WINDOW_CLICK[0]).let { if (it != persistContainerId) return }
+                    inventory as InventoryPacket
+                }
+
                 val rawSlot = packet.read<Int>(FILEDS_WINDOW_CLICK[1]) ?: return
                 val button = packet.read<Int>(FILEDS_WINDOW_CLICK[2]) ?: return
                 val mode = ClickType.Mode.valueOf(packet.read<Any>(FILEDS_WINDOW_CLICK[3]).toString())
                 val type = ClickType.find(mode, button, rawSlot) ?: return
-                val inventory = window.inventory as InventoryPacket
+
 
                 if (rawSlot >= 0) {
                     player.sendCancelCoursor()
@@ -112,8 +124,21 @@ object Listener {
     @SubscribeEvent
     fun e(e: PlayerChangedWorldEvent) = e.player.windowClosure()
 
-    @SubscribeEvent
-    fun e(e: PlayerQuitEvent) = e.player.windowClosure()
+//    @SubscribeEvent
+//    fun e(e: PlayerJoinEvent) {
+//        val player = e.player
+//        if (MinecraftVersion.majorLegacy > 11400) {
+//            val byteInventory = player
+//                .persistentDataContainer
+//                .get("invero_restore".asNamespacedKey, PersistentDataType.BYTE_ARRAY)
+//
+//            submitAsync {
+//                byteInventory?.deserializeToInventory(player.inventory).also {
+//                    info("Restored player inventory for ${player.name}")
+//                }
+//            }
+//        }
+//    }
 
     @Suppress("DEPRECATION", "For better compatibility")
     @SubscribeEvent
@@ -124,7 +149,11 @@ object Listener {
     }
 
     private fun PlayerViewer.viewingPacketWindow(): BukkitWindow? {
-        return findWindow(name)?.let { if (it.inventory is InventoryPacket) it else null }
+        return viewingWindow()?.let { if (it.inventory is InventoryPacket) it else null }
+    }
+
+    private fun PlayerViewer.viewingWindow(): BukkitWindow? {
+        return findWindow(name)
     }
 
     private fun Player.windowClosure() {

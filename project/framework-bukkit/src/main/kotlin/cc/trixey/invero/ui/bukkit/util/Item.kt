@@ -10,6 +10,8 @@ import taboolib.module.nms.getItemTag
 import taboolib.module.nms.setItemTag
 import taboolib.platform.util.*
 
+private val namespacedKey = "invero_icon".asNamespacedKey
+
 fun ItemStack.isUIMarked(): Boolean {
     var isMarked = false
     if (MinecraftVersion.majorLegacy > 11400) {

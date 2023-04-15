@@ -6,6 +6,7 @@ import cc.trixey.invero.ui.common.scroll.ScrollDirection
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import kotlinx.serialization.json.JsonPrimitive
 
 /**
  * Invero
@@ -20,7 +21,7 @@ class StructureScroll(
     @SerialName("direction")
     val _direction: String?,
     @SerialName("default-index")
-    val defaultIndex: Int?,
+    val defaultIndex: JsonPrimitive?,
     val colums: List<@Serializable(with = ListIconSerializer::class) List<Icon>>
 ) {
 

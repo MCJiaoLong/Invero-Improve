@@ -10,6 +10,7 @@ import org.bukkit.event.inventory.*
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
+import taboolib.common.platform.function.submitAsync
 
 /**
  * Invero
@@ -28,9 +29,20 @@ class InventoryVanilla(override val window: BukkitWindow) : ProxyBukkitInventory
         error("Not supported inventory type (${containerType.bukkitType}) yet")
     }
 
+    override val hidePlayerInventory: Boolean by lazy { window.hidePlayerInventory }
+
     override var containerId: Int = -1
-    override val hidePlayerInventory: Boolean
-        get() = window.hidePlayerInventory
+
+    private var playerInventoryItems =
+        if (hidePlayerInventory) arrayOfNulls<ItemStack?>(36)
+        else viewer.copyStorage()
+        // 设置玩家背包
+        set(value) {
+            field = value
+            println("Update player inventory BY setting..")
+            updatePlayerInventory()
+        }
+
 
     override fun isVirtual(): Boolean {
         return false
@@ -40,6 +52,24 @@ class InventoryVanilla(override val window: BukkitWindow) : ProxyBukkitInventory
     private var moveCallback: (InventoryClickEvent) -> Boolean = { true }
     private var collectCallback: (InventoryClickEvent) -> Boolean = { true }
     private var dragCallback: (InventoryDragEvent) -> Boolean = { true }
+
+    fun updatePlayerInventory(vararg slots: Int) {
+        if (!hidePlayerInventory || window.anyIOPanel) return
+
+        if (slots.isEmpty()) {
+            playerInventoryItems
+                .mapIndexed { index, itemStack -> (index + containerSize) to itemStack }
+                .let {
+                    handler.sendWindowSetSlots(viewer, containerId, it.toMap())
+                }
+        } else {
+            slots
+                .map { it to playerInventoryItems[it] }
+                .let {
+                    handler.sendWindowSetSlots(viewer, containerId, it.toMap())
+                }
+        }
+    }
 
     fun onClick(handler: (InventoryClickEvent) -> Boolean): InventoryVanilla {
         clickCallback = handler
@@ -66,8 +96,8 @@ class InventoryVanilla(override val window: BukkitWindow) : ProxyBukkitInventory
     }
 
     override fun get(slot: Int): ItemStack? {
-        return if (slot + 1 > containerSize) {
-            getPlayerInventory().getItem(slot.outflowCorrect())
+        return if (slot >= containerSize) {
+            playerInventoryItems[slot - containerSize]
         } else {
             container.getItem(slot)
         }
@@ -75,10 +105,12 @@ class InventoryVanilla(override val window: BukkitWindow) : ProxyBukkitInventory
 
     override fun set(slot: Int, itemStack: ItemStack?) {
         synced {
-            if (slot + 1 > containerSize) {
-                getPlayerInventory().setItem(slot.outflowCorrect(), itemStack)
+            if (slot >= containerSize) {
+                playerInventoryItems[slot - containerSize] = itemStack
+                updatePlayerInventory(slot - containerSize)
             } else {
                 container.setItem(slot, itemStack)
+                updatePlayerInventory()
             }
         }
     }
@@ -90,6 +122,18 @@ class InventoryVanilla(override val window: BukkitWindow) : ProxyBukkitInventory
     override fun open() {
         viewer.openInventory(container)
         containerId = handler.getContainerId(viewer)
+        updatePlayerInventory()
+
+        // temp
+        if (!hidePlayerInventory && !window.anyIOPanel) {
+            submitAsync(delay = 10L, period = 20L) {
+                if (!window.isViewing()) {
+                    cancel()
+                    return@submitAsync
+                }
+                playerInventoryItems = viewer.copyStorage()
+            }
+        }
     }
 
     fun handleClick(e: InventoryClickEvent) {
@@ -99,9 +143,8 @@ class InventoryVanilla(override val window: BukkitWindow) : ProxyBukkitInventory
         // 点击的坐标
         val slot = e.rawSlot
         // 如果点击玩家背包容器
-        if (slot > window.type.slotsContainer.last) {
+        if (slot >= containerSize) {
             if (!hidePlayerInventory && window.anyIOPanel) {
-
                 e.isCancelled = false
                 return
             }

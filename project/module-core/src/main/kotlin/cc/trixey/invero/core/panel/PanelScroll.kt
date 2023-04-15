@@ -73,17 +73,27 @@ class PanelScroll(
         }
 
         // 滚动区域
-       return parent.scroll(scrollScale.pair, scrollLocate.value, direction = scroll.direction, tail = scroll.tail ?: -1) {
-           scroll.colums.forEach { icons ->
-               insertColum {
-                   if (it <= icons.lastIndex)
-                       icons[it].invoke(session, this@PanelScroll, this)
-                   else
-                       null
-               }
-           }
-           scroll.defaultIndex?.let { shift(it, it) }
-       }
+        return parent.scroll(
+            scrollScale.pair,
+            scrollLocate.value,
+            direction = scroll.direction,
+            tail = scroll.tail ?: -1
+        ) {
+            scroll.colums.forEach { icons ->
+                insertColum {
+                    if (it <= icons.lastIndex)
+                        icons[it].invoke(session, this@PanelScroll, this)
+                    else
+                        null
+                }
+            }
+            val defShift = session.parse(scroll.defaultIndex?.content ?: "-1").toIntOrNull() ?: -1
+            if (defShift > 0) {
+                scroll.defaultIndex?.let {
+                    shift(defShift, defShift)
+                }
+            }
+        }
     }
 
 }

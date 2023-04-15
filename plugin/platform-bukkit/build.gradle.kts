@@ -28,6 +28,7 @@ tasks {
         // adventure
         relocate("net.kyori", "$rootGroup.common.adventure")
         // taboolib
+//        relocate("com.electronwill.nightconfig", "com.electronwill.nightconfig_3_6_6")
         relocate("taboolib", "$rootGroup.taboolib")
         relocate("tb", "$rootGroup.taboolib")
         relocate("org.tabooproject", "$rootGroup.taboolib.library")

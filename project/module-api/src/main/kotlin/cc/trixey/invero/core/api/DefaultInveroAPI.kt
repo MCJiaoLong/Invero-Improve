@@ -1,13 +1,9 @@
 package cc.trixey.invero.core.api
 
-import cc.trixey.invero.common.ElementGenerator
-import cc.trixey.invero.common.ItemSourceProvider
 import cc.trixey.invero.common.api.*
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
 import taboolib.common.platform.PlatformFactory
-import taboolib.platform.util.bukkitPlugin
-import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Invero

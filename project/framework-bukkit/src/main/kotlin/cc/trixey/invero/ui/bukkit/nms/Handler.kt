@@ -12,7 +12,7 @@ import taboolib.common.platform.function.submitAsync
 import taboolib.common.util.unsafeLazy
 import taboolib.library.reflex.Reflex.Companion.setProperty
 import taboolib.module.nms.nmsProxy
-import taboolib.module.nms.sendPacketBlocking
+import taboolib.module.nms.sendPacket
 
 /**
  * Invero
@@ -74,6 +74,6 @@ fun Player.sendCancelCoursor() {
 
 internal fun Player.postPacket(packet: Any, vararg fields: Pair<String, Any?>) = packet.apply {
     fields.forEach { (key, value) -> setProperty(key, value) }
-    sendPacketBlocking(this)
+    sendPacket(this)
     return this
 }

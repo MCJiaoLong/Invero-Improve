@@ -51,7 +51,11 @@ class InventoryPacket(override val window: BukkitWindow) : ProxyBukkitInventory 
     }
 
     override fun set(slot: Int, itemStack: ItemStack?) {
-        windowItems[slot] = itemStack
+        try {
+            windowItems[slot] = itemStack
+        } catch (e: Throwable) {
+            println("Failed to set slot $slot to $itemStack")
+        }
         update(slot)
     }
 
