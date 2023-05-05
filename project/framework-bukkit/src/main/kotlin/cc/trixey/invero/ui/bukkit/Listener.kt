@@ -11,7 +11,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.inventory.*
 import org.bukkit.event.player.PlayerChangedWorldEvent
-import org.bukkit.event.player.PlayerPickupItemEvent
+import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.ItemStack
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
@@ -62,6 +62,9 @@ object Listener {
     @SubscribeEvent
     fun e(e: InventoryCloseEvent) = e.delegatedEvent { handleCloseEvent(e) }
 
+    @SubscribeEvent
+    fun e(e: PlayerQuitEvent) = e.player.viewer.viewingWindow()?.close(false, updateInventory = false)
+
     private fun InventoryEvent.delegatedEvent(block: InventoryVanilla.() -> Unit) = view.topInventory.let {
         val holder = it.holder
         if (holder is InventoryVanilla.Holder) {
@@ -90,7 +93,8 @@ object Listener {
                 val inventory = viewer.viewingWindow()?.inventory ?: return
 
                 if (inventory is InventoryVanilla && inventory.hidePlayerInventory) {
-                    submit(now = true) { inventory.updatePlayerInventory() }
+                    player.sendCancelCoursor()
+                    submit { inventory.updatePlayerInventory() }
                     return
                 } else {
                     packet.read<Int>(FILEDS_WINDOW_CLICK[0]).let { if (it != persistContainerId) return }
@@ -139,14 +143,6 @@ object Listener {
 //            }
 //        }
 //    }
-
-    @Suppress("DEPRECATION", "For better compatibility")
-    @SubscribeEvent
-    fun e(e: PlayerPickupItemEvent) {
-        if (findWindow(e.player.name) != null) {
-            e.isCancelled = true
-        }
-    }
 
     private fun PlayerViewer.viewingPacketWindow(): BukkitWindow? {
         return viewingWindow()?.let { if (it.inventory is InventoryPacket) it else null }

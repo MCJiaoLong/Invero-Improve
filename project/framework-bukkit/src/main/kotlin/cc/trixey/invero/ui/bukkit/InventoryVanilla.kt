@@ -6,6 +6,7 @@ import cc.trixey.invero.ui.bukkit.panel.CraftingPanel
 import cc.trixey.invero.ui.bukkit.util.clickType
 import cc.trixey.invero.ui.bukkit.util.synced
 import org.bukkit.Bukkit
+import org.bukkit.entity.Player
 import org.bukkit.event.inventory.*
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
@@ -39,7 +40,6 @@ class InventoryVanilla(override val window: BukkitWindow) : ProxyBukkitInventory
         // 设置玩家背包
         set(value) {
             field = value
-            println("Update player inventory BY setting..")
             updatePlayerInventory()
         }
 
@@ -116,7 +116,8 @@ class InventoryVanilla(override val window: BukkitWindow) : ProxyBukkitInventory
     }
 
     override fun isViewing(): Boolean {
-        return viewer.openInventory.topInventory == container
+        val viewer = window.viewer.getSafely<Player>()
+        return viewer != null && viewer.isOnline && viewer.openInventory.topInventory == container
     }
 
     override fun open() {

@@ -23,11 +23,10 @@ import java.util.concurrent.ConcurrentHashMap
 val storageMap = ConcurrentHashMap<UUID, Storage>()
 
 fun Player.copyStorage(): Array<ItemStack?> {
-    val from = inventory.contents.clone()
+    val from = inventory.storageContents.clone()
     val to = arrayOfNulls<ItemStack?>(36)
     from.forEachIndexed { it, itemStack ->
-        val fixed = if (it > 26) it - 27 else it + 9
-        to[fixed] = itemStack
+        to[it] = itemStack
     }
     return to
 }

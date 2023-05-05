@@ -3,8 +3,6 @@ package cc.trixey.invero.core.action
 import cc.trixey.invero.core.Context
 import cc.trixey.invero.core.serialize.NetesedActionSerializer
 import kotlinx.serialization.Serializable
-import taboolib.common.platform.function.isPrimaryThread
-import taboolib.common.platform.function.submit
 import java.util.concurrent.CompletableFuture
 
 /**
@@ -20,18 +18,17 @@ class NetesedAction(val actions: List<Action>) : Action() {
     override fun run(context: Context): CompletableFuture<Boolean> {
         val future = CompletableFuture<Boolean>()
 
-        submit(async = !isPrimaryThread) {
-            for (index in actions.indices) {
-                val action = actions[index]
-                val result = action.run(context).get()
-                if (!result) {
-                    future.complete(false)
-                    break
-                } else if (index == actions.lastIndex) {
-                    future.complete(true)
+        fun runAction(index: Int) {
+            actions[index].run(context).thenAccept {
+                if (it && index < actions.lastIndex) {
+                    runAction(index + 1)
+                } else {
+                    future.complete(it)
                 }
             }
         }
+
+        runAction(0)
 
         return future
     }

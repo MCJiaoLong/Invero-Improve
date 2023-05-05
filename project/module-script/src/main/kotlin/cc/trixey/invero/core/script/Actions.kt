@@ -6,6 +6,8 @@ import cc.trixey.invero.core.compat.eco.HookPlayerPoints
 import cc.trixey.invero.core.script.loader.InveroKetherParser
 import cc.trixey.invero.core.util.translateFormattedMessage
 import org.bukkit.entity.Player
+import taboolib.common5.cdouble
+import taboolib.common5.cint
 import taboolib.module.kether.*
 import taboolib.platform.compat.depositBalance
 import taboolib.platform.compat.getBalance
@@ -72,12 +74,15 @@ internal fun actionEco() = scriptParser {
         val method = it.nextToken()
         if (method == null || method == "get" || method == "balance") actionNow { player().getBalance() }
         else {
-            val money = it.nextDouble()
-            when (method) {
-                "has" -> actionNow { player().getBalance() >= money }
-                "take" -> actionNow { player().withdrawBalance(money) }
-                "give" -> actionNow { player().depositBalance(money) }
-                else -> error("Unknown eco method: $method")
+            val parsedAction = it.nextParsedAction()
+            actionNow {
+                val amount = newFrame(parsedAction).run<String>().getNow("0").cdouble
+                when (method) {
+                    "has" -> player().getBalance() >= amount
+                    "take" -> player().withdrawBalance(amount)
+                    "give" -> player().depositBalance(amount)
+                    else -> error("Unknown eco method: $method")
+                }
             }
         }
     }
@@ -92,12 +97,15 @@ internal fun actionPoints() = scriptParser {
             HookPlayerPoints.look(player()) ?: -1
         }
         else {
-            val points = it.nextInt()
-            when (method) {
-                "has" -> actionNow { (HookPlayerPoints.look(player()) ?: 0) >= points }
-                "take" -> actionNow { HookPlayerPoints.take(player(), points) }
-                "give" -> actionNow { HookPlayerPoints.add(player(), points) }
-                else -> error("Unknown playerpoints method: $method")
+            val parsedAction = it.nextParsedAction()
+            actionNow {
+                val amount = newFrame(parsedAction).run<String>().getNow("0").cint
+                when (method) {
+                    "has" -> (HookPlayerPoints.look(player()) ?: 0) >= amount
+                    "take" -> HookPlayerPoints.take(player(), amount)
+                    "give" -> HookPlayerPoints.add(player(), amount)
+                    else -> error("Unknown eco method: $method")
+                }
             }
         }
     }

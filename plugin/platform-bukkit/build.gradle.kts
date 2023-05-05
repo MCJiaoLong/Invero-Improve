@@ -33,7 +33,7 @@ tasks {
         relocate("tb", "$rootGroup.taboolib")
         relocate("org.tabooproject", "$rootGroup.taboolib.library")
         // kotlin
-        relocate("kotlin.", "kotlin1810.") { exclude("kotlin.Metadata") }
+        relocate("kotlin.", "kotlin1820.") { exclude("kotlin.Metadata") }
         relocate("kotlinx.serialization", "kotlinx150.serialization")
     }
     build {

@@ -4,7 +4,7 @@ const val rootName = "Invero"
 const val rootGroup = "cc.trixey.invero"
 const val rootVersion = "1.0.7"
 
-const val kotlinVersion = "1.8.10"
+const val kotlinVersion = "1.8.20"
 const val shadowJarVersion = "8.1.0"
 const val taboolibPluginVersion = "1.56"
 
