@@ -22,7 +22,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           distribution: adopt
-          java-version: 17
+          java-version: 8
       - name: make gradle wrapper executable
         run: chmod +x ./gradlew
       - name: build
@@ -40,3 +40,8 @@ jobs:
         id: build_4
         if: steps.build_3.outcome == 'failure'
         run: ./gradlew build
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: Invero Artifact
+          path: plugin/platform/build/libs/*.jar

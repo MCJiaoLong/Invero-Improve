@@ -96,14 +96,14 @@ class ActionInventory {
         fun parser() = scriptParser {
             when (val token = it.nextToken()) {
                 "close" -> actionNow { getBukkitPlayer().closeInventory() }
-                "count", "amount" -> InventoryCount(it.nextToken().toInferItem())
-                "has", "have", "check" -> InventoryCheck(it.nextToken().toInferItem(), matchAmount(it))
-                "take", "remove" -> InventoryTake(it.nextToken().toInferItem(), matchAmount(it))
+                "count", "amount" -> InventoryCount(it.nextToken().lowercase().toInferItem())
+                "has", "have", "check" -> InventoryCheck(it.nextToken().lowercase().toInferItem(), matchAmount(it))
+                "take", "remove" -> InventoryTake(it.nextToken().lowercase().toInferItem(), matchAmount(it))
                 "slot" -> {
                     it.mark()
                     try {
                         it.expects("is", "match")
-                        InventorySlot(it.nextParsedAction(), it.nextToken().toInferItem(), matchAmount(it))
+                        InventorySlot(it.nextParsedAction(), it.nextToken().lowercase().toInferItem(), matchAmount(it))
                     } catch (ex: Exception) {
                         it.reset()
                         val slot = it.nextParsedAction()
@@ -125,7 +125,7 @@ class ActionInventory {
                     it.mark()
                     try {
                         it.expects("is", "match")
-                        InventoryEquipment(equip, it.nextToken().toInferItem(), matchAmount(it))
+                        InventoryEquipment(equip, it.nextToken().lowercase().toInferItem(), matchAmount(it))
                     } catch (ex: Exception) {
                         it.reset()
                         actionNow { equip.getItem(getBukkitPlayer()) }

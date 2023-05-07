@@ -3,11 +3,11 @@ package cc.trixey.invero.core.script
 import cc.trixey.invero.core.item.TextureHead
 import cc.trixey.invero.core.item.TextureMaterial
 import cc.trixey.invero.core.item.TextureSource
+import cc.trixey.invero.core.script.loader.InveroKetherParser
 import org.bukkit.inventory.ItemStack
 import taboolib.common.OpenResult
 import taboolib.common5.Coerce
 import taboolib.common5.cint
-import cc.trixey.invero.core.script.loader.InveroKetherParser
 import taboolib.module.kether.KetherProperty
 import taboolib.module.kether.ScriptProperty
 import taboolib.module.kether.combinationParser
@@ -38,7 +38,7 @@ object ActionItem {
                     "head" -> TextureHead(item).lazyTexture
                     else -> TextureSource(handle, item).lazyTexture
                 }
-                    ?.apply { setAmount(amount.cint.coerceIn(0..64)) }
+                    ?.apply { setAmount(amount.cint.coerceAtLeast(0)) }
                     ?.clone()
             }
         }

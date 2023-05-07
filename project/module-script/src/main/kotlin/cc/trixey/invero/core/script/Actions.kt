@@ -6,6 +6,7 @@ import cc.trixey.invero.core.compat.eco.HookPlayerPoints
 import cc.trixey.invero.core.script.loader.InveroKetherParser
 import cc.trixey.invero.core.util.translateFormattedMessage
 import org.bukkit.entity.Player
+import taboolib.common5.cdouble
 import taboolib.module.kether.*
 import taboolib.platform.compat.depositBalance
 import taboolib.platform.compat.getBalance
@@ -39,8 +40,7 @@ connect <serverName> for <playerName>
 @InveroKetherParser(["connect", "bungee"])
 internal fun actionConnect() = combinationParser {
     it.group(
-        text(),
-        command("for", then = action()).option().defaultsTo(null)
+        text(), command("for", then = action()).option().defaultsTo(null)
     ).apply(it) { server, player ->
         future {
             if (player == null) {
@@ -49,9 +49,7 @@ internal fun actionConnect() = combinationParser {
                 } ?: CompletableFuture.completedFuture(null)
             } else {
                 newFrame(player).run<Any>().thenApply { playerId ->
-                    onlinePlayers
-                        .find { p -> p.name == playerId }
-                        ?.let { p -> Bungees.connect(p, server) }
+                    onlinePlayers.find { p -> p.name == playerId }?.let { p -> Bungees.connect(p, server) }
                 }
             }
         }
@@ -65,14 +63,15 @@ internal fun actionConnect() = combinationParser {
  * eco give 200
  * eco set 200
  */
-@InveroKetherParser(["eco", "money", "vault"])
-internal fun actionEco() = scriptParser {
+//@InveroKetherParser(["eco", "money", "vault"])
+@KetherParser(["eco", "money", "vault"], shared = true)
+internal fun actionEco() = scriptParser { it ->
     if (!it.hasNext()) actionNow { player().getBalance() }
     else {
         val method = it.nextToken()
         if (method == null || method == "get" || method == "balance") actionNow { player().getBalance() }
         else {
-            val money = it.nextDouble()
+            val money = it.nextToken()/*.translateFormattedMessage(player,context)*/.cdouble
             when (method) {
                 "has" -> actionNow { player().getBalance() >= money }
                 "take" -> actionNow { player().withdrawBalance(money) }
