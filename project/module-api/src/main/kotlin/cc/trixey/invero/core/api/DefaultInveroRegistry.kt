@@ -68,7 +68,7 @@ class DefaultInveroRegistry : InveroRegistry {
     }
 
 
-    override fun reigsterAction(name: String, action: MenuAction) {
+    override fun registerAction(name: String, action: MenuAction) {
 
     }
 

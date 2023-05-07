@@ -1,9 +1,8 @@
 package cc.trixey.invero.core.script
 
 import cc.trixey.invero.common.Invero
-import cc.trixey.invero.core.script.player
-import org.bukkit.Bukkit
 import cc.trixey.invero.core.script.loader.InveroKetherParser
+import org.bukkit.Bukkit
 import taboolib.module.kether.combinationParser
 
 /**

@@ -79,6 +79,6 @@ class TextureMaterial(override val raw: String) : Texture() {
 
     }
 
-    override fun clone() = TextureMaterial( raw)
+    override fun clone() = TextureMaterial(raw)
 
 }

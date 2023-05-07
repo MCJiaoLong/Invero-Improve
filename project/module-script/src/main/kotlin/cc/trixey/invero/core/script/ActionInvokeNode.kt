@@ -1,9 +1,8 @@
 package cc.trixey.invero.core.script
 
 import cc.trixey.invero.core.BaseMenu
-import cc.trixey.invero.core.script.session
-import taboolib.common.platform.function.submitAsync
 import cc.trixey.invero.core.script.loader.InveroKetherParser
+import taboolib.common.platform.function.submitAsync
 import taboolib.module.kether.combinationParser
 import java.util.concurrent.CompletableFuture
 

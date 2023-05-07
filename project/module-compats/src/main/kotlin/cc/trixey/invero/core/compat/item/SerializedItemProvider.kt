@@ -1,9 +1,9 @@
 package cc.trixey.invero.core.compat.item
 
 import cc.trixey.invero.common.ItemSourceProvider
+import cc.trixey.invero.common.util.standardJson
 import cc.trixey.invero.core.compat.DefItemProvider
 import cc.trixey.invero.core.serialize.ItemStackJsonSerializer
-import cc.trixey.invero.common.util.standardJson
 import org.bukkit.inventory.ItemStack
 import taboolib.platform.util.deserializeToItemStack
 import java.util.*

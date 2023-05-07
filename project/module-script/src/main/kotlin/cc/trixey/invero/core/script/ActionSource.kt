@@ -1,6 +1,5 @@
 package cc.trixey.invero.core.script
 
-import cc.trixey.invero.core.script.selfSourceObject
 import cc.trixey.invero.core.script.loader.InveroKetherParser
 import taboolib.module.kether.combinationParser
 

@@ -44,6 +44,7 @@ class StructureGenerator(
     }
 
     fun create() =
-        Invero.API.getRegistry().createElementGenerator(source ?: "custom") ?: error("Unregistered generator source [$source]")
+        Invero.API.getRegistry().createElementGenerator(source ?: "custom")
+            ?: error("Unregistered generator source [$source]")
 
 }

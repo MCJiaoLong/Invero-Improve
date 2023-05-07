@@ -24,7 +24,7 @@ class NeigeItemsProvider : ItemSourceProvider, PluginHook() {
     // identifier可以直接填id, 也可以填"id data", data代表指向数据, 指向数据和id之间用空格分离
     // 指向数据是用来控制生成指定形态物品的
     override fun getItem(identifier: String, context: Any?): ItemStack? {
-        with (identifier.split(" ", limit = 2)) {
+        with(identifier.split(" ", limit = 2)) {
             // 物品ID
             val id = get(0)
             // 解析对象

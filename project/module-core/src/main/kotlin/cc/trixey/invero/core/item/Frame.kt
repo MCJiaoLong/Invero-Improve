@@ -96,7 +96,7 @@ class Frame(
         return tag
     }
 
-    fun inheirt(frame: Frame) = arrayOf(
+    fun inherit(frame: Frame) = arrayOf(
         "texture",
         "name",
         "lore",

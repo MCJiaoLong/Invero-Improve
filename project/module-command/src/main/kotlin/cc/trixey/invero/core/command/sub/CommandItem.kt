@@ -60,7 +60,8 @@ object CommandItem {
         submitAsync {
             player.sendLang("paste-init")
 
-            val serialized = Json.encodeToJsonElement(ItemStackJsonSerializer, this@postItemSerialization).jsonObject.reduceEmpty()
+            val serialized =
+                Json.encodeToJsonElement(ItemStackJsonSerializer, this@postItemSerialization).jsonObject.reduceEmpty()
             val view = createContent("Structure View", prettyJson.encodeToString(serialized), "JSON")
             val base64 = createContent("Format Base64", Base64.getEncoder().encodeToString(serializeToByteArray()))
             val json = createContent("Format Json", standardJson.encodeToString(serialized), "JSON")

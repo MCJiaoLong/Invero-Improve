@@ -19,7 +19,7 @@ interface InveroRegistry {
 
     fun callActivator(player: Player, name: String, vararg params: Any): Boolean
 
-    fun reigsterAction(name: String, action: MenuAction)
+    fun registerAction(name: String, action: MenuAction)
 
     fun createElementGenerator(identifier: String): ElementGenerator?
 

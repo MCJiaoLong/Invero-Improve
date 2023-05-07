@@ -65,7 +65,7 @@ object CommandDev {
     }
 
     @CommandBody
-    val printSerailizedMenu = subCommand {
+    val printSerializedMenu = subCommand {
         execute<CommandSender> { _, _, argument ->
             val menuId = argument.split(" ").getOrNull(1) ?: return@execute
             val menuManager = Invero.API.getMenuManager()

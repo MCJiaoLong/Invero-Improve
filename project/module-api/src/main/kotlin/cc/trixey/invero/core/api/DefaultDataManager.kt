@@ -45,7 +45,7 @@ class DefaultDataManager : InveroDataManager {
                 )
 
                 InveroDataManager.Type.SQL -> setupPlayerDatabase(
-                    InveroSettings.sqlSection ?: error("No valid sql section configurated")
+                    InveroSettings.sqlSection ?: error("No valid sql section configured")
                 )
             }
         }.onFailure {

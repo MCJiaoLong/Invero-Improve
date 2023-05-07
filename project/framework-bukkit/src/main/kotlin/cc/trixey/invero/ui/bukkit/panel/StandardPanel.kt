@@ -8,7 +8,6 @@ import cc.trixey.invero.ui.common.Pos
 import cc.trixey.invero.ui.common.Scale
 import cc.trixey.invero.ui.common.event.ClickType
 import cc.trixey.invero.ui.common.panel.ElementalPanel
-import cc.trixey.invero.ui.common.panel.TypedPanelContainer
 import cc.trixey.invero.ui.common.panel.PanelWeight
 import org.bukkit.event.inventory.InventoryClickEvent
 

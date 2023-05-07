@@ -22,7 +22,7 @@ class CommandStructure(
     val permission: String?,
     val permissionMessage: String?,
     @JsonNames("argument", "args")
-    val arguments: List<@Serializable(with = CommandArgumentSerailizer::class) CommandArgument>?
+    val arguments: List<@Serializable(with = CommandArgumentSerializer::class) CommandArgument>?
 ) {
 
     @Transient
@@ -63,7 +63,7 @@ class CommandArgument(
 }
 
 @Serializer(forClass = CommandArgument::class)
-internal object CommandArgumentSerailizer : JsonTransformingSerializer<CommandArgument>(serializer()) {
+internal object CommandArgumentSerializer : JsonTransformingSerializer<CommandArgument>(serializer()) {
 
     override fun transformDeserialize(element: JsonElement): JsonElement {
         return if (element is JsonPrimitive) {

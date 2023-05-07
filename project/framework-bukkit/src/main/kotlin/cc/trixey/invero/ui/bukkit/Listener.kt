@@ -2,7 +2,6 @@ package cc.trixey.invero.ui.bukkit
 
 import cc.trixey.invero.ui.bukkit.api.dsl.viewer
 import cc.trixey.invero.ui.bukkit.api.findWindow
-import cc.trixey.invero.ui.bukkit.api.registeredWindows
 import cc.trixey.invero.ui.bukkit.nms.persistContainerId
 import cc.trixey.invero.ui.bukkit.nms.sendCancelCoursor
 import cc.trixey.invero.ui.bukkit.util.copyUIMarked

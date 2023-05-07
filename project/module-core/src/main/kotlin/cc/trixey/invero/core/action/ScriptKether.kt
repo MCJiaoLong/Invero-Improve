@@ -24,10 +24,10 @@ class ScriptKether(val script: String) : Condition {
         val isTrue =
             script == "1" || script.equals("true", ignoreCase = true) || script.equals("yes", ignoreCase = true);
 
-        val isFale =
+        val isFalse =
             script == "0" || script.equals("false", ignoreCase = true) || script.equals("no", ignoreCase = true);
 
-        staticCondition = (isTrue || isFale) to CompletableFuture.completedFuture(isTrue)
+        staticCondition = (isTrue || isFalse) to CompletableFuture.completedFuture(isTrue)
     }
 
 

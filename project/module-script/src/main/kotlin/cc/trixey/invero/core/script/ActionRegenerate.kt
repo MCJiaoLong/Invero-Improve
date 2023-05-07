@@ -1,16 +1,13 @@
 package cc.trixey.invero.core.script
 
 import cc.trixey.invero.common.Object
-import cc.trixey.invero.core.script.contextVar
-import cc.trixey.invero.core.script.findNearstPanel
-import cc.trixey.invero.core.script.session
+import cc.trixey.invero.core.script.loader.InveroKetherParser
 import cc.trixey.invero.core.util.KetherHandler
 import cc.trixey.invero.ui.common.panel.GeneratorPanel
 import cc.trixey.invero.ui.common.panel.PagedPanel
 import org.bukkit.entity.Player
 import taboolib.common5.Baffle
 import taboolib.common5.cbool
-import cc.trixey.invero.core.script.loader.InveroKetherParser
 import taboolib.module.kether.combinationParser
 import java.util.concurrent.TimeUnit
 

@@ -1,10 +1,8 @@
 package cc.trixey.invero.core.script
 
-import cc.trixey.invero.core.script.findNearstPanel
-import cc.trixey.invero.core.script.selfPanel
+import cc.trixey.invero.core.script.loader.InveroKetherParser
 import cc.trixey.invero.ui.bukkit.panel.CraftingPanel
 import org.bukkit.inventory.ItemStack
-import cc.trixey.invero.core.script.loader.InveroKetherParser
 import taboolib.module.kether.combinationParser
 import taboolib.platform.util.isAir
 import taboolib.platform.util.isNotAir
@@ -51,7 +49,7 @@ object ActionStorage {
                             val item = newFrame(value).run<ItemStack?>().getNow(null)
                             panel.set(slot, item)
                             panel.runCallback()
-                        } else "NULLED ITEM"
+                        } else "INVALID ITEM"
                     }
 
                     "isFree" -> slot in panel.freeSlots

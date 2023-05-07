@@ -1,8 +1,7 @@
 package cc.trixey.invero.core.script
 
-import cc.trixey.invero.core.script.session
-import cc.trixey.invero.ui.bukkit.WindowAnvil
 import cc.trixey.invero.core.script.loader.InveroKetherParser
+import cc.trixey.invero.ui.bukkit.WindowAnvil
 import taboolib.module.kether.combinationParser
 
 /**

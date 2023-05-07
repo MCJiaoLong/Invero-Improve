@@ -76,7 +76,7 @@ internal object SelectorAgentPanel : JsonContentPolymorphicSerializer<AgentPanel
     override fun selectDeserializer(element: JsonElement): KSerializer<out AgentPanel> {
         val keys = element.jsonObject
         return when {
-            // generator -> PanelGeneraotr... etc
+            // generator -> PanelGenerator... etc
             "pages" in keys -> PanelPaged.serializer()
             "generator" in keys -> PanelGenerator.serializer()
             "scroll" in keys -> PanelScroll.serializer()

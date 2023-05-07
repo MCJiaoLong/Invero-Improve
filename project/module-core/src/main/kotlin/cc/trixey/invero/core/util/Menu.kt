@@ -1,8 +1,8 @@
 package cc.trixey.invero.core.util
 
+import cc.trixey.invero.core.icon.Slot
 import cc.trixey.invero.ui.common.Pos
 import cc.trixey.invero.ui.common.Scale
-import cc.trixey.invero.core.icon.Slot
 
 /**
  * Invero

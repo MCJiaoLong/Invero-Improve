@@ -24,7 +24,10 @@ class FunctionalActionCatchers(val catchers: List<InputCatcher>) : Action() {
         val defType = head.type
         for (i in 1 until catchers.size) {
             val catcher = catchers[i]
-            if (catcher.type != defType && catcher.content == null && catcher.signLine == null) catcher.setProperty("type", defType)
+            if (catcher.type != defType && catcher.content == null && catcher.signLine == null) catcher.setProperty(
+                "type",
+                defType
+            )
             if (catcher.cancel == null) catcher.setProperty("cancel", head.cancel)
             if (catcher.beforeInput == null) catcher.setProperty("beforeInput", head.beforeInput)
             if (catcher.onRepeat == null) catcher.setProperty("onRepeat", head.onRepeat)

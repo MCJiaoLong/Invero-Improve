@@ -127,7 +127,7 @@ class NMSImpl : NMS {
 
     override fun getContainerId(player: Player): Int {
         player as CraftPlayer
-        return  if (isUniversal) {
+        return if (isUniversal) {
             player.handle.getProperty<Container>("containerMenu")!!.getProperty<Int>("containerId")!!
         } else {
             player.handle.activeContainer.windowId

@@ -7,7 +7,7 @@ import taboolib.common5.cdouble
 
 /**
  * Invero
- * cc.trixey.invero.core.action.Comparor
+ * cc.trixey.invero.core.action.Comparator
  *
  * @author Arasple
  * @since 2023/1/14 12:45

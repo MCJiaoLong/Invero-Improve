@@ -48,6 +48,7 @@ class NodeRunnable(
                 TEXT -> session.parse(value)
                 KETHER -> KetherHandler.invoke(value, viewer, session.getVariables(context?.variables) + variables)
                     .getNow("<TIMEOUT: KETHER>")
+
                 JAVASCRIPT -> runJS(value, session, variables)
                     .getNow("<TIMEOUT: JAVASCRIPT>")
             }.toString()

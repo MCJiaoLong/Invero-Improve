@@ -4,7 +4,7 @@ import cc.trixey.invero.common.Invero
 import cc.trixey.invero.common.sourceObject
 import cc.trixey.invero.core.BaseMenu
 import cc.trixey.invero.core.compat.DefGeneratorProvider
-import cc.trixey.invero.core.geneartor.BaseGenerator
+import cc.trixey.invero.core.generator.BaseGenerator
 
 /**
  * Invero

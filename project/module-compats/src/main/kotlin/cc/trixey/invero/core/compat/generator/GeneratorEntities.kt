@@ -3,7 +3,7 @@ package cc.trixey.invero.core.compat.generator
 import cc.trixey.invero.common.sourceObject
 import cc.trixey.invero.core.Context
 import cc.trixey.invero.core.compat.DefGeneratorProvider
-import cc.trixey.invero.core.geneartor.ContextGenerator
+import cc.trixey.invero.core.generator.ContextGenerator
 import org.bukkit.entity.Player
 
 /**

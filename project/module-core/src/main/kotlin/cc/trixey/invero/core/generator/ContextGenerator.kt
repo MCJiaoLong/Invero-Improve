@@ -1,4 +1,4 @@
-package cc.trixey.invero.core.geneartor
+package cc.trixey.invero.core.generator
 
 import cc.trixey.invero.common.ElementGenerator
 import cc.trixey.invero.common.Object
@@ -6,7 +6,7 @@ import cc.trixey.invero.core.Context
 
 /**
  * Invero
- * cc.trixey.invero.core.geneartor.ContextGenerator
+ * cc.trixey.invero.core.generator.ContextGenerator
  *
  * @author Arasple
  * @since 2023/2/23 9:27

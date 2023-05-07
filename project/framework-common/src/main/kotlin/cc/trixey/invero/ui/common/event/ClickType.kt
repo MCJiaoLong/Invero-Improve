@@ -128,7 +128,7 @@ enum class ClickType(val mode: Mode, val button: Int, val slot: Int = -1, val bu
     }
 
     /*
-    # Paiting interaction
+    # Painting interaction
 
     Starting from version 1.5, “painting mode” is available for use in inventory windows.
     It is done by picking up stack of something (more than 1 chemdah),

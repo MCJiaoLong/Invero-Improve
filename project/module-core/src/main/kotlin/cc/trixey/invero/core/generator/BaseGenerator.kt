@@ -1,11 +1,11 @@
-package cc.trixey.invero.core.geneartor
+package cc.trixey.invero.core.generator
 
 import cc.trixey.invero.common.ElementGenerator
 import cc.trixey.invero.common.Object
 
 /**
  * Invero
- * cc.trixey.invero.core.geneartor.BaseGenerator
+ * cc.trixey.invero.core.generator.BaseGenerator
  *
  * @author Arasple
  * @since 2023/2/2 14:39
