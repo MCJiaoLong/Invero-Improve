@@ -44,4 +44,13 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: Invero Artifact
-          path: plugin/platform/build/libs/*.jar
+          path: plugin/platform-bukkit/build/libs/*.jar
+      - name: Automatic Releases
+        uses: marvinpinto/action-automatic-releases@latest
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: false
+          title: "Invero-Improve 自动构建最新版本"
+          files: |
+            plugin/platform-bukkit/build/libs/*.jar
