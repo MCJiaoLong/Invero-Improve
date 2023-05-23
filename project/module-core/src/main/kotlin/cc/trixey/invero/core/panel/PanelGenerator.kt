@@ -3,7 +3,10 @@
 package cc.trixey.invero.core.panel
 
 import cc.trixey.invero.common.Object
-import cc.trixey.invero.core.*
+import cc.trixey.invero.core.AgentPanel
+import cc.trixey.invero.core.Context
+import cc.trixey.invero.core.Layout
+import cc.trixey.invero.core.Session
 import cc.trixey.invero.core.icon.Icon
 import cc.trixey.invero.core.serialize.MappedIconSerializer
 import cc.trixey.invero.core.serialize.PosSerializer
@@ -66,20 +69,20 @@ class PanelGenerator(
                 session.setVariable("@raw_filter", settings.filter)
             }
             // 应用元素
-            generatorSource { genearte(session) }
+            generatorSource {
+                genearte(session)
+            }
             // 生成输出
             generatorOutput {
                 settings.output.invoke(session, this@PanelGenerator, this, (it as Object).variables)
             }
-
-            submit(delay = 5L) {
-                println("操你妈")
-                render()
+            // 渲染
+            submit(delay = 1L) {
                 def.forEach {
                     it.relocate()
                     it.render()
                 }
-                (session.menu as BaseMenu).updateTitle(session)
+                render()
             }
         }
 

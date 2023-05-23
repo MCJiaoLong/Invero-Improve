@@ -15,7 +15,6 @@ import cc.trixey.invero.core.menu.NodeRunnable
 import cc.trixey.invero.core.panel.PanelCrafting
 import cc.trixey.invero.core.serialize.ListAgentPanelSerializer
 import cc.trixey.invero.core.serialize.NodeSerializer
-import cc.trixey.invero.core.util.containsAnyPlaceholder
 import cc.trixey.invero.core.util.session
 import cc.trixey.invero.core.util.translateFormattedMessage
 import cc.trixey.invero.core.util.unregisterSession
@@ -132,13 +131,7 @@ class BaseMenu(
             runCatching {
                 // 开启 Window
                 // 其本身会检查是否已经打开任何 Window，并自动关闭等效旧菜单的 Window
-                window.preOpen {
-                    panels.forEach { p -> p.invoke(window, session) }
-                    // 部分标题需要菜单语境变量更新的情况
-                    if (settings.title.default.containsAnyPlaceholder) {
-                        updateTitle(session)
-                    }
-                }
+                window.preOpen { panels.forEach { p -> p.invoke(window, session) } }
                 window.open()
                 // 屏蔽掉频繁的交互
                 if (isVirtual())

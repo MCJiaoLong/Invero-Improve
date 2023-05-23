@@ -4,7 +4,8 @@ import cc.trixey.invero.core.script.PageOperator.*
 import cc.trixey.invero.core.script.loader.InveroKetherParser
 import cc.trixey.invero.ui.common.panel.PagedPanel
 import taboolib.common5.cint
-import taboolib.module.kether.*
+import taboolib.module.kether.combinationParser
+import taboolib.module.kether.run
 
 /**
  * Invero
@@ -24,7 +25,7 @@ object ActionPage {
             command("to", "by", then = action()).option().defaultsTo(null)
         ).apply(it) { type, value ->
             now {
-                val panel = findNearstPanelRecursively<PagedPanel>() ?: return@now "<NOT_FOUND_PAGEDPANEL>"
+                val panel = findNearstPanelRecursively<PagedPanel>() ?: return@now ""
                 when (val operator = PageOperator.of(type)) {
                     GET -> panel.pageIndex
                     GET_MAX -> panel.maxPageIndex

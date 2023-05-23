@@ -86,14 +86,6 @@ abstract class BukkitWindow(
 
         // 如果被取消
         if (preOpenCallback(this) == false) return
-//        // 当前未备份物品，则说明是首次打开容器，进行备份
-//        if (!player.isCurrentlyStored()) {
-//            player.storePlayerInventory(hidePlayerInventory)
-//        }
-//        // 如果隐藏背包，则删除之
-//        if (hidePlayerInventory) {
-//            player.inventory.storageContents = arrayOfNulls(36)
-//        }
         // 正在查看一个 Window，则伪关闭
         findWindow(viewer.name)?.unregisterWindow()
         // 注册窗口
@@ -106,7 +98,9 @@ abstract class BukkitWindow(
             inventory.open()
             openCallback(this)
         }
-        submit(delay = 2L) { invokable() }
+        submit(delay = 2L) {
+            invokable()
+        }
     }
 
     override fun close(doCloseInventory: Boolean, updateInventory: Boolean) {

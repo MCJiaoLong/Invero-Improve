@@ -71,7 +71,11 @@ object ActionIcon {
         when (action) {
             "relocate" -> relocate()
             "update" -> renderItem()
-            "refresh" -> if (relocate()) renderItem()
+            "refresh" -> {
+                relocate()
+                renderItem()
+            }
+
             "index", "sub_index" -> iconIndex
             "pause_update" -> pauseUpdateTask()
             "pause_relocate" -> pauseRelocateTask()
