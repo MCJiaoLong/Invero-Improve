@@ -1,6 +1,8 @@
-package cc.trixey.invero.common.chemdah
+package cc.trixey.invero.core.script
 
+import cc.trixey.invero.common.chemdah.InferItem
 import cc.trixey.invero.common.chemdah.InferItem.Companion.toInferItem
+import cc.trixey.invero.core.script.loader.InveroKetherParser
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import taboolib.library.kether.ParsedAction
@@ -13,7 +15,7 @@ import java.util.concurrent.CompletableFuture
 
 /**
  * Chemdah
- * cc.trixey.invero.common.chemdah.ActionInventory
+ * cc.trixey.invero.core.script.ActionInventory
  *
  * @author sky
  * @since 2021/2/10 6:39 下午
@@ -92,7 +94,7 @@ class ActionInventory {
          * inventory helmet is "minecraft:stone"
          * inventory slot 9 is "minecraft:stone"
          */
-        @KetherParser(["inventory"], shared = true)
+        @InveroKetherParser(["inventory"])
         fun parser() = scriptParser {
             when (val token = it.nextToken()) {
                 "close" -> actionNow { getBukkitPlayer().closeInventory() }

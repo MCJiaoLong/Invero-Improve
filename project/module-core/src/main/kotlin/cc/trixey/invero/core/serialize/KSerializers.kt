@@ -1,12 +1,14 @@
 @file:OptIn(ExperimentalSerializationApi::class)
 @file:RuntimeDependencies(
     RuntimeDependency(
-        value = "org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.5.0-RC",
-        relocate = ["!kotlin.", "!kotlin1820.", "!kotlinx.", "!kotlinx150."],
+        value = "!org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.5.0-RC",
+        test = "!kotlinx1820_150.serialization.Serializer",
+        relocate = ["!kotlin.", "!kotlin1820.", "!kotlinx.", "!kotlinx1820_150."],
         transitive = false
     ), RuntimeDependency(
-        value = "org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.5.0-RC",
-        relocate = ["!kotlin.", "!kotlin1820.", "!kotlinx.", "!kotlinx150."],
+        value = "!org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.5.0-RC",
+        test = "!kotlinx1820_150.serialization.json.JsonKt",
+        relocate = ["!kotlin.", "!kotlin1820.", "!kotlinx.", "!kotlinx1820_150."],
         transitive = false
     )
 )

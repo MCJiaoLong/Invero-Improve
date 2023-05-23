@@ -8,8 +8,10 @@ import cc.trixey.invero.common.MenuActivator
 import cc.trixey.invero.common.events.MenuCloseEvent
 import cc.trixey.invero.common.events.MenuOpenEvent
 import cc.trixey.invero.common.util.prettyPrint
-import cc.trixey.invero.core.*
-import cc.trixey.invero.core.menu.*
+import cc.trixey.invero.core.menu.MenuEvents
+import cc.trixey.invero.core.menu.MenuSettings
+import cc.trixey.invero.core.menu.MenuTask
+import cc.trixey.invero.core.menu.NodeRunnable
 import cc.trixey.invero.core.panel.PanelCrafting
 import cc.trixey.invero.core.serialize.ListAgentPanelSerializer
 import cc.trixey.invero.core.serialize.NodeSerializer
@@ -32,7 +34,6 @@ import org.bukkit.entity.Player
 import taboolib.common.platform.function.submitAsync
 import taboolib.library.reflex.Reflex.Companion.setProperty
 import taboolib.platform.util.giveItem
-import java.util.*
 import java.util.concurrent.CompletableFuture
 
 /**
@@ -128,11 +129,14 @@ class BaseMenu(
             runCatching {
                 // 开启 Window
                 // 其本身会检查是否已经打开任何 Window，并自动关闭等效旧菜单的 Window
-                window.preOpen { panels.forEach { it.invoke(window, session) } }
-                // 部分标题需要菜单语境变量更新的情况
-                if (settings.title.default.containsAnyPlaceholder) {
-                    window.onOpen { updateTitle(session) }
+                window.preOpen {
+                    panels.forEach { it.invoke(window, session) }
+                    // 部分标题需要菜单语境变量更新的情况
+                    if (settings.title.default.containsAnyPlaceholder) {
+                        updateTitle(session)
+                    }
                 }
+
                 window.open()
                 // 屏蔽掉频繁的交互
                 if (isVirtual())

@@ -118,6 +118,16 @@ class NMSImpl : NMS {
     }
 
     override fun sendWindowSetSlots(player: Player, containerId: Int, items: Map<Int, ItemStack?>) {
+
+        println(
+            """
+               ---------------------- SET_ITEMS
+           """.trimIndent()
+        )
+        items.forEach { (slot, item) ->
+            println("slot: $slot, item: $item")
+        }
+
         val packets = items.map { (slot, itemStack) ->
             PacketPlayOutSetSlot::class.java.unsafeInstance().apply {
                 mapOf(

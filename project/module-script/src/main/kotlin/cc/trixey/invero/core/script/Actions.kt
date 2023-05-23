@@ -46,9 +46,9 @@ internal fun actionConnect() = combinationParser {
     ).apply(it) { server, player ->
         future {
             if (player == null) {
-                session()?.viewer?.get<Player>()?.let { player ->
-                    CompletableFuture.completedFuture(Bungees.connect(player, server))
-                } ?: CompletableFuture.completedFuture(null)
+                (session()?.viewer?.get<Player>()
+                    ?: player()).let { player -> CompletableFuture.completedFuture(Bungees.connect(player, server)) }
+                    ?: CompletableFuture.completedFuture(null)
             } else {
                 newFrame(player).run<Any>().thenApply { playerId ->
                     onlinePlayers

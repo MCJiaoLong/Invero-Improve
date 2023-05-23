@@ -34,7 +34,7 @@ tasks {
         relocate("org.tabooproject", "$rootGroup.taboolib.library")
         // kotlin
         relocate("kotlin.", "kotlin1820.") { exclude("kotlin.Metadata") }
-        relocate("kotlinx.serialization", "kotlinx150.serialization")
+        relocate("kotlinx.serialization", "kotlinx1820_150.serialization")
     }
     build {
         dependsOn(shadowJar)

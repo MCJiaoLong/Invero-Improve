@@ -63,7 +63,13 @@ object Listener {
     fun e(e: InventoryCloseEvent) = e.delegatedEvent { handleCloseEvent(e) }
 
     @SubscribeEvent
-    fun e(e: PlayerQuitEvent) = e.player.viewer.viewingWindow()?.close(false, updateInventory = false)
+    fun e(e: PlayerQuitEvent) {
+        try {
+            e.player.viewer.viewingWindow()?.close(false, updateInventory = false)
+        } catch (_: Throwable) {
+
+        }
+    }
 
     private fun InventoryEvent.delegatedEvent(block: InventoryVanilla.() -> Unit) = view.topInventory.let {
         val holder = it.holder
@@ -127,22 +133,6 @@ object Listener {
 
     @SubscribeEvent
     fun e(e: PlayerChangedWorldEvent) = e.player.windowClosure()
-
-//    @SubscribeEvent
-//    fun e(e: PlayerJoinEvent) {
-//        val player = e.player
-//        if (MinecraftVersion.majorLegacy > 11400) {
-//            val byteInventory = player
-//                .persistentDataContainer
-//                .get("invero_restore".asNamespacedKey, PersistentDataType.BYTE_ARRAY)
-//
-//            submitAsync {
-//                byteInventory?.deserializeToInventory(player.inventory).also {
-//                    info("Restored player inventory for ${player.name}")
-//                }
-//            }
-//        }
-//    }
 
     private fun PlayerViewer.viewingPacketWindow(): BukkitWindow? {
         return viewingWindow()?.let { if (it.inventory is InventoryPacket) it else null }
