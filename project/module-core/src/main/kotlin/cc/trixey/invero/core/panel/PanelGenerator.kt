@@ -56,24 +56,24 @@ class PanelGenerator(
     override fun invoke(parent: PanelContainer, session: Session) =
         parent.generatorPaged(scale.pair, parent.locate()) {
             skipRender = true
-
             // 生成默认图标
             val def = icons.map { (_, icon) ->
                 icon.invoke(session, this@PanelGenerator, this@generatorPaged, renderNow = false)
             }
-            // 应用元素
-            generatorSource { genearte(session) }
             // 过滤元素
             if (settings.filter != null) {
                 filter(session, this@generatorPaged, settings.filter)
                 session.setVariable("@raw_filter", settings.filter)
             }
+            // 应用元素
+            generatorSource { genearte(session) }
             // 生成输出
             generatorOutput {
                 settings.output.invoke(session, this@PanelGenerator, this, (it as Object).variables)
             }
 
-            submit(delay = 1L) {
+            submit(delay = 5L) {
+                println("操你妈")
                 render()
                 def.forEach {
                     it.relocate()

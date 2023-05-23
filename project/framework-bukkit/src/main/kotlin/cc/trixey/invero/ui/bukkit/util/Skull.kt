@@ -45,6 +45,7 @@ private fun requestCustomTextureHead(texture: String) =
         .computeIfAbsent(texture) {
             defaultHead.clone().modifyHeadTexture(texture)
         }
+        .clone()
 
 private fun requestPlayerHead(name: String, response: (ItemStack) -> Unit) {
     if (name in cachedSkulls.keys) {

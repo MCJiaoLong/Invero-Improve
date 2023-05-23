@@ -133,13 +133,12 @@ class BaseMenu(
                 // 开启 Window
                 // 其本身会检查是否已经打开任何 Window，并自动关闭等效旧菜单的 Window
                 window.preOpen {
-                    panels.forEach { it.invoke(window, session) }
+                    panels.forEach { p -> p.invoke(window, session) }
                     // 部分标题需要菜单语境变量更新的情况
                     if (settings.title.default.containsAnyPlaceholder) {
                         updateTitle(session)
                     }
                 }
-
                 window.open()
                 // 屏蔽掉频繁的交互
                 if (isVirtual())
@@ -149,7 +148,7 @@ class BaseMenu(
                 // 应用动态标题属性
                 settings.title.submit(session)
                 // 应用周期事件
-                tasks?.forEach { it.value.submit(session) }
+                tasks?.forEach { x -> x.value.submit(session) }
                 // 开启后事件动作
                 events?.postOpen(session)
             }.onFailure {
