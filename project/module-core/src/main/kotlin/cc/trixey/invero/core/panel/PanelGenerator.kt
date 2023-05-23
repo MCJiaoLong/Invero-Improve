@@ -3,10 +3,7 @@
 package cc.trixey.invero.core.panel
 
 import cc.trixey.invero.common.Object
-import cc.trixey.invero.core.AgentPanel
-import cc.trixey.invero.core.Context
-import cc.trixey.invero.core.Layout
-import cc.trixey.invero.core.Session
+import cc.trixey.invero.core.*
 import cc.trixey.invero.core.icon.Icon
 import cc.trixey.invero.core.serialize.MappedIconSerializer
 import cc.trixey.invero.core.serialize.PosSerializer
@@ -78,11 +75,22 @@ class PanelGenerator(
             }
             // 渲染
             submit(delay = 1L) {
+                // 渲染默认图标
                 def.forEach {
                     it.relocate()
                     it.render()
                 }
+                // 渲染生成器内容
                 render()
+            }
+            // 更新
+            submit(delay = 3L) {
+                // 更新图标
+                def.forEach {
+                    if (it.relocate()) it.renderItem()
+                }
+                // 刷新标题
+                (session.menu as? BaseMenu)?.updateTitle(session)
             }
         }
 
