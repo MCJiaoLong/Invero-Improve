@@ -1,5 +1,6 @@
 package cc.trixey.invero.ui.bukkit.nms
 
+import cc.trixey.invero.ui.common.ContainerType
 import net.minecraft.server.v1_16_R3.*
 import net.minecraft.world.inventory.Containers
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer
@@ -29,7 +30,7 @@ class NMSImpl : NMS {
     override fun sendWindowOpen(
         player: Player,
         containerId: Int,
-        type: cc.trixey.invero.ui.common.ContainerType,
+        type: ContainerType,
         title: String
     ) {
         val instance = PacketPlayOutOpenWindow::class.java.unsafeInstance()
@@ -119,14 +120,6 @@ class NMSImpl : NMS {
 
     override fun sendWindowSetSlots(player: Player, containerId: Int, items: Map<Int, ItemStack?>) {
 
-        println(
-            """
-               ---------------------- SET_ITEMS
-           """.trimIndent()
-        )
-        items.forEach { (slot, item) ->
-            println("slot: $slot, item: $item")
-        }
 
         val packets = items.map { (slot, itemStack) ->
             PacketPlayOutSetSlot::class.java.unsafeInstance().apply {

@@ -125,7 +125,10 @@ class BaseMenu(
         // 开始处理窗口开启
 
         (events?.preOpen(session) ?: CompletableFuture.completedFuture(true)).thenApply {
-            if (!it) return@thenApply
+            if (!it) {
+                viewer.unregisterSession()
+                return@thenApply
+            }
             runCatching {
                 // 开启 Window
                 // 其本身会检查是否已经打开任何 Window，并自动关闭等效旧菜单的 Window

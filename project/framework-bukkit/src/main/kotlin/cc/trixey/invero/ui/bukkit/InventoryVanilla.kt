@@ -59,9 +59,9 @@ class InventoryVanilla(override val window: BukkitWindow) : ProxyBukkitInventory
         if (slots.isEmpty()) {
             playerInventoryItems
                 .mapIndexed { index, itemStack -> (index + containerSize) to itemStack }
-                .filterNot { it.second == null }
                 .let {
-                    handler.sendWindowSetSlots(viewer, containerId, it.toMap())
+                    val items = it.toMap()
+                    handler.sendWindowSetSlots(viewer, containerId, items)
                 }
         } else {
             slots
