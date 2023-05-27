@@ -50,7 +50,26 @@ object CommandItem {
         }
     }
 
-    private fun ItemStack?.postItemSerialization(player: Player) {
+    @CommandBody
+    val encodePrint = subCommand {
+        dynamic("slot", optional = true) {
+            suggest { BukkitEquipment.values().map { it.nms } }
+
+            execute<Player> { player, ctx, _ ->
+                val equipment = BukkitEquipment.fromString(ctx["slot"])
+                BukkitEquipment
+                    .getItems(player)[equipment]
+                    .postItemSerialization(player, true)
+            }
+        }
+        execute<Player> { player, _, _ ->
+            BukkitEquipment
+                .getItems(player)[BukkitEquipment.HAND]
+                .postItemSerialization(player, true)
+        }
+    }
+
+    private fun ItemStack?.postItemSerialization(player: Player, print: Boolean = false) {
         if (isAir) {
             player.sendLang("item-air")
             return
@@ -63,8 +82,17 @@ object CommandItem {
             val serialized =
                 Json.encodeToJsonElement(ItemStackJsonSerializer, this@postItemSerialization).jsonObject.reduceEmpty()
             val view = createContent("Structure View", prettyJson.encodeToString(serialized), "JSON")
-            val base64 = createContent("Format Base64", Base64.getEncoder().encodeToString(serializeToByteArray()))
-            val json = createContent("Format Json", standardJson.encodeToString(serialized), "JSON")
+            val valueBase64 = Base64.getEncoder().encodeToString(serializeToByteArray())
+            val valueJson = standardJson.encodeToString(serialized)
+            val base64 = createContent("Format Base64", valueBase64)
+            val json = createContent("Format Json", valueJson, "JSON")
+
+            if (print) {
+                println("Base64: ")
+                println(valueBase64)
+                println("Json: ")
+                println(valueJson)
+            }
 
             paste(
                 "Invero Item Serialization",

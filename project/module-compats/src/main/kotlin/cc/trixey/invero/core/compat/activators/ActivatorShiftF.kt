@@ -47,7 +47,6 @@ class ActivatorShiftF(private val interval: Long = 8_00) : MenuActivator<Activat
 
     override fun call(player: Player, vararg params: Any): Boolean {
         val pass = params[0] as Long
-        println("passed $pass // $interval")
         return if (pass < interval) {
             activate(player)
             true

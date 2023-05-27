@@ -8,12 +8,13 @@ import cc.trixey.invero.common.MenuActivator
 import cc.trixey.invero.common.events.MenuCloseEvent
 import cc.trixey.invero.common.events.MenuOpenEvent
 import cc.trixey.invero.common.util.prettyPrint
-import cc.trixey.invero.core.*
-import cc.trixey.invero.core.menu.*
+import cc.trixey.invero.core.menu.MenuEvents
+import cc.trixey.invero.core.menu.MenuSettings
+import cc.trixey.invero.core.menu.MenuTask
+import cc.trixey.invero.core.menu.NodeRunnable
 import cc.trixey.invero.core.panel.PanelCrafting
 import cc.trixey.invero.core.serialize.ListAgentPanelSerializer
 import cc.trixey.invero.core.serialize.NodeSerializer
-import cc.trixey.invero.core.util.containsAnyPlaceholder
 import cc.trixey.invero.core.util.session
 import cc.trixey.invero.core.util.translateFormattedMessage
 import cc.trixey.invero.core.util.unregisterSession
@@ -32,7 +33,6 @@ import org.bukkit.entity.Player
 import taboolib.common.platform.function.submitAsync
 import taboolib.library.reflex.Reflex.Companion.setProperty
 import taboolib.platform.util.giveItem
-import java.util.*
 import java.util.concurrent.CompletableFuture
 
 /**
@@ -124,15 +124,14 @@ class BaseMenu(
         // 开始处理窗口开启
 
         (events?.preOpen(session) ?: CompletableFuture.completedFuture(true)).thenApply {
-            if (!it) return@thenApply
+            if (!it) {
+                viewer.unregisterSession()
+                return@thenApply
+            }
             runCatching {
                 // 开启 Window
                 // 其本身会检查是否已经打开任何 Window，并自动关闭等效旧菜单的 Window
-                window.preOpen { panels.forEach { it.invoke(window, session) } }
-                // 部分标题需要菜单语境变量更新的情况
-                if (settings.title.default.containsAnyPlaceholder) {
-                    window.onOpen { updateTitle(session) }
-                }
+                window.preOpen { panels.forEach { p -> p.invoke(window, session) } }
                 window.open()
                 // 屏蔽掉频繁的交互
                 if (isVirtual())
@@ -142,7 +141,7 @@ class BaseMenu(
                 // 应用动态标题属性
                 settings.title.submit(session)
                 // 应用周期事件
-                tasks?.forEach { it.value.submit(session) }
+                tasks?.forEach { x -> x.value.submit(session) }
                 // 开启后事件动作
                 events?.postOpen(session)
             }.onFailure {

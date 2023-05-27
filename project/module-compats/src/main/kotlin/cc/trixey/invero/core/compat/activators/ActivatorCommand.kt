@@ -53,13 +53,15 @@ class ActivatorCommand(val command: JsonElement) : MenuActivator<ActivatorComman
             .getJsonSerializer<Json>()
             .decodeFromJsonElement<CommandStructure>(jsonObject)
             .apply {
+                val perm = permission ?: ""
                 command(
                     name,
                     aliases ?: emptyList(),
                     description ?: "",
                     usage ?: "",
-                    permission ?: "",
-                    permissionMessage ?: ""
+                    perm,
+                    permissionMessage ?: "",
+                    permissionDefault = if (perm.isEmpty()) PermissionDefault.TRUE else PermissionDefault.OP
                 ) {
                     // 无参数或没有必选参数，则添加默认执行为打开菜单
                     if (arguments.isNullOrEmpty() || arguments.all { it.optional }) {
@@ -107,7 +109,11 @@ class ActivatorCommand(val command: JsonElement) : MenuActivator<ActivatorComman
         val id = menu.id ?: return
         val content = jsonPrimitive.contentOrNull?.lowercase() ?: return
 
-        command(content) { execute<Player> { sender, _, _ -> Invero.API.getMenuManager().getMenu(id)?.open(sender) } }
+        command(content, permissionDefault = PermissionDefault.TRUE) {
+            execute<Player> { sender, _, _ ->
+                Invero.API.getMenuManager().getMenu(id)?.open(sender)
+            }
+        }
         registeredCommands += content
     }
 

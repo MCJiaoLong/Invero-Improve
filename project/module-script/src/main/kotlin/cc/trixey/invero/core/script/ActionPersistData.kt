@@ -3,6 +3,7 @@ package cc.trixey.invero.core.script
 import cc.trixey.invero.common.Invero
 import cc.trixey.invero.core.script.loader.InveroKetherParser
 import org.bukkit.Bukkit
+import taboolib.expansion.Database
 import taboolib.module.kether.combinationParser
 
 /**
@@ -53,10 +54,20 @@ object ActionPersistData {
                             ?.let { v -> dataContainer[key] = v }
                     }
 
-                    "del", "delete", "remove" -> dataContainer.source.remove(key)
+                    "del", "delete", "remove" -> {
+                        dataContainer.source.remove(key)
+                        dataContainer.database.removeBy(dataContainer.user, key)
+                    }
+
                     else -> "<ERROR ACTION: $action>"
                 }
             }
+        }
+    }
+
+    fun Database.removeBy(user: String, name: String) {
+        type.tableVar().delete(dataSource) {
+            where("user" eq user and ("key" eq name))
         }
     }
 

@@ -16,7 +16,10 @@ import java.util.concurrent.CompletableFuture
  * @since 2023/1/31 21:10
  */
 @Serializable
-class FunctionalActionCatchers(val catchers: List<InputCatcher>) : Action() {
+class FunctionalActionCatchers(
+    val catchers: List<InputCatcher>,
+    val reopen: Boolean = true
+) : Action() {
 
     init {
         // inherit
@@ -45,7 +48,7 @@ class FunctionalActionCatchers(val catchers: List<InputCatcher>) : Action() {
         // processor
         fun process(iterator: Iterator<InputCatcher>) {
             if (!iterator.hasNext()) {
-                if (menu != null) Invero.API.getMenuManager().getMenu(menu)?.open(player, context.variables)
+                if (reopen && menu != null) Invero.API.getMenuManager().getMenu(menu)?.open(player, context.variables)
                 return
             }
             iterator.next().run(player, context) { process(iterator) }

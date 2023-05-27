@@ -69,8 +69,13 @@ object ActionIcon {
 
     private fun IconElement.handle(action: String) {
         when (action) {
-            "relocate", "refresh" -> relocate()
+            "relocate" -> relocate()
             "update" -> renderItem()
+            "refresh" -> {
+                relocate()
+                renderItem()
+            }
+
             "index", "sub_index" -> iconIndex
             "pause_update" -> pauseUpdateTask()
             "pause_relocate" -> pauseRelocateTask()

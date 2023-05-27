@@ -15,7 +15,6 @@ import taboolib.module.kether.combinationParser
 internal fun chance() = combinationParser {
     it.group(double()).apply(it) { random ->
         val chance = if (random > 1) random else random * 100.0
-
         now {
             return@now chance > (0..100).random()
         }

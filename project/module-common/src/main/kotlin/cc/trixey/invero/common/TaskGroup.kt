@@ -5,6 +5,7 @@ import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
 import taboolib.common.platform.function.submit
 import taboolib.common.platform.service.PlatformExecutor
+import taboolib.platform.BukkitExecutor
 import taboolib.platform.util.bukkitPlugin
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArraySet
@@ -18,9 +19,14 @@ import java.util.concurrent.CopyOnWriteArraySet
  */
 class TaskGroup(private val platformTasks: CopyOnWriteArraySet<PlatformExecutor.PlatformTask> = CopyOnWriteArraySet()) {
 
-    fun unregisterAll(cleanup: Boolean = false) {
-        platformTasks.forEach { it.cancel() }
-        if (cleanup) platformTasks.clear()
+    fun unregisterAll() {
+        platformTasks.removeIf {
+            it as BukkitExecutor.BukkitPlatformTask
+            if (!it.runnable.isCancelled) {
+                it.cancel()
+            }
+            true
+        }
     }
 
     fun launch(

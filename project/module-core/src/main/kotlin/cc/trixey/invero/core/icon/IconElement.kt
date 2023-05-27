@@ -105,8 +105,8 @@ open class IconElement(
     /**
      * 重新定位子图标
      */
-    fun relocate() {
-        if (icon.subIcons.isNullOrEmpty()) return
+    fun relocate(): Boolean {
+        if (icon.subIcons.isNullOrEmpty()) return false
 
         val previousIndex = iconIndex
         val relocatedIndex = relocateIndex()
@@ -116,13 +116,16 @@ open class IconElement(
             frame = icon.defaultFrame
             framesDefaultDelay = icon.framesProperties?.defaultDelay ?: 20L
             framesCyclic = icon.generateCyclicFrames()
+            return true
         } else if (relocatedIndex >= 0 && relocatedIndex != previousIndex) {
             val subIcon = icon.subIcons[relocatedIndex]
             iconIndex = relocatedIndex
             frame = subIcon.defaultFrame
             framesCyclic = subIcon.generateCyclicFrames()
             framesDefaultDelay = subIcon.framesProperties?.defaultDelay ?: 20L
+            return true
         }
+        return false
     }
 
     fun relocateIndex(): Int {

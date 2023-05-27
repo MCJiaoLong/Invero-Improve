@@ -99,7 +99,7 @@ class PagedGeneratorPanel<T>(
             }
         }
 
-        // render default elements
+        // render elements
         super.render()
     }
 

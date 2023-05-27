@@ -30,6 +30,6 @@ interface InveroJavaScriptHandler {
     /**
      * 注册持久绑定
      */
-    fun registerPersistBindings(name: String, bindings: Map<String, Any>)
+    fun registerPersistBindings(bindings: Map<String, Any>)
 
 }

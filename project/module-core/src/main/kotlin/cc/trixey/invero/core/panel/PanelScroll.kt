@@ -87,7 +87,12 @@ class PanelScroll(
                         null
                 }
             }
-            scroll.defaultIndex?.let { shift(it, it) }
+            val defShift = session.parse(scroll.defaultIndex?.content ?: "-1").toIntOrNull() ?: -1
+            if (defShift > 0) {
+                scroll.defaultIndex?.let {
+                    shift(defShift, defShift)
+                }
+            }
         }
     }
 

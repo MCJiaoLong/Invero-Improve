@@ -1,7 +1,6 @@
 package cc.trixey.invero.core.api
 
 import cc.trixey.invero.common.api.InveroJavaScriptHandler
-import kotlinx.serialization.json.*
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
 import taboolib.common.platform.PlatformFactory
@@ -58,7 +57,7 @@ class DefaultJavaScriptHandler : InveroJavaScriptHandler {
         persistFunctions[name] = function
     }
 
-    override fun registerPersistBindings(name: String, bindings: Map<String, Any>) {
+    override fun registerPersistBindings(bindings: Map<String, Any>) {
         persistBindings += bindings
     }
 

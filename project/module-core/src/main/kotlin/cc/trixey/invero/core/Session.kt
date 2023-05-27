@@ -117,7 +117,7 @@ class Session(
             sessions.remove(session.viewer.name, session)
             session.taskGroup.unregisterAll()
             val viewer = session.viewer
-            submitAsync(delay = 40L) { if (viewer.session == null) TaskGroup.get(viewer.name).unregisterAll(true) }
+            submitAsync(delay = 40L) { if (viewer.session == null) TaskGroup.get(viewer.name).unregisterAll() }
         }
 
         val String.varType: VarType

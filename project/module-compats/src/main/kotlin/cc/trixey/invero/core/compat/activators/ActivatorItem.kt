@@ -14,6 +14,7 @@ import kotlinx.serialization.json.jsonPrimitive
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
+import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.module.nms.MinecraftVersion
 import taboolib.platform.util.isOffhand
@@ -32,7 +33,7 @@ class ActivatorItem(private val inferItem: InferItem, private val raw: JsonEleme
 
     companion object {
 
-        @SubscribeEvent
+        @SubscribeEvent(priority = EventPriority.HIGHEST, ignoreCancelled = true)
         fun e(e: PlayerInteractEvent) {
             if (MinecraftVersion.majorLegacy >= 10900 && e.isOffhand()) return
             if (e.player.session != null) return

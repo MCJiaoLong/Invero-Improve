@@ -20,6 +20,10 @@ class HeadDatabaseItemProvider : ItemSourceProvider, PluginHook() {
 
     private val headDatabaseAPI by lazy { HeadDatabaseAPI() }
 
+    override fun translateIdentifier(): Boolean {
+        return false
+    }
+
     override fun getItem(identifier: String, context: Any?): ItemStack? {
         return headDatabaseAPI.getItemHead(identifier) ?: headDatabaseAPI.randomHead
     }

@@ -56,7 +56,9 @@ interface NMS {
      * @param slot The slot that should be updated
      * @param itemStack The to update chemdah stack
      */
-    fun sendWindowSetSlot(player: Player, containerId: Int, slot: Int, itemStack: ItemStack? = null, stateId: Int = 1)
+    fun sendWindowSetSlot(player: Player, containerId: Int, slot: Int, itemStack: ItemStack? = null, stateId: Int = -1)
+
+    fun sendWindowSetSlots(player: Player, containerId: Int, items: Map<Int,ItemStack?>)
 
     /**
      * This packet is used to inform the client that part of a GUI window should be updated.

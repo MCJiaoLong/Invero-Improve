@@ -28,12 +28,13 @@ tasks {
         // adventure
         relocate("net.kyori", "$rootGroup.common.adventure")
         // taboolib
+//        relocate("com.electronwill.nightconfig", "com.electronwill.nightconfig_3_6_6")
         relocate("taboolib", "$rootGroup.taboolib")
         relocate("tb", "$rootGroup.taboolib")
         relocate("org.tabooproject", "$rootGroup.taboolib.library")
         // kotlin
-        relocate("kotlin.", "kotlin1810.") { exclude("kotlin.Metadata") }
-        relocate("kotlinx.serialization", "kotlinx150.serialization")
+        relocate("kotlin.", "kotlin1820.") { exclude("kotlin.Metadata") }
+        relocate("kotlinx.serialization", "kotlinx1820_150.serialization")
     }
     build {
         dependsOn(shadowJar)

@@ -27,7 +27,7 @@ class TextureHead(@SerialName("head") override val raw: String) : Texture() {
 
     override fun generateItem(context: Context, block: (ItemStack) -> Unit) {
         if (lazyTexture != null) return block(lazyTexture!!)
-        if (!containsPlaceholder && raw.length > 20) requestHead(raw) { lazyTexture = it.also(block) }
+        if (!containsPlaceholder && raw.length > 20) requestHead(raw.trim()) { lazyTexture = it.also(block) }
         else {
             val parsed = context.parse(raw)
             requestHead(parsed) { block(it.clone()) }

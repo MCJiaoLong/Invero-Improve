@@ -34,7 +34,7 @@ private val defaultHead = XMaterial.PLAYER_HEAD.parseItem()!!
 private val cachedSkulls = ConcurrentHashMap<String, ItemStack>()
 
 fun requestHead(identifier: String, response: (ItemStack) -> Unit) {
-    if (identifier.length > 20)
+    if (identifier.length > 30)
         requestCustomTextureHead(identifier).also(response)
     else
         requestPlayerHead(identifier, response)
@@ -45,6 +45,7 @@ private fun requestCustomTextureHead(texture: String) =
         .computeIfAbsent(texture) {
             defaultHead.clone().modifyHeadTexture(texture)
         }
+        .clone()
 
 private fun requestPlayerHead(name: String, response: (ItemStack) -> Unit) {
     if (name in cachedSkulls.keys) {
@@ -110,8 +111,9 @@ fun ItemStack.modifyHeadTexture(input: String): ItemStack {
                 .getEncoder()
                 .encodeToString("{\"textures\":{\"SKIN\":{\"url\":\"http://textures.minecraft.net/texture/$input\"}}}".toByteArray())
         else input
-
-    profile.properties.put("textures", Property("textures", texture, "Invero_TexturedSkull"))
+    profile
+        .properties
+        .put("textures", Property("textures", texture, "Invero_TexturedSkull"))
 
     return modifyMeta<SkullMeta> { setProperty("profile", profile) }
 }

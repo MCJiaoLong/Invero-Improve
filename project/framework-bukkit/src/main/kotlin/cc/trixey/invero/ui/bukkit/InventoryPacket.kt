@@ -4,6 +4,7 @@ import cc.trixey.invero.ui.bukkit.nms.handler
 import cc.trixey.invero.ui.bukkit.nms.persistContainerId
 import cc.trixey.invero.ui.common.event.ClickType
 import org.bukkit.inventory.ItemStack
+import taboolib.common.platform.function.submitAsync
 
 /**
  * Invero
@@ -23,9 +24,22 @@ class InventoryPacket(override val window: BukkitWindow) : ProxyBukkitInventory 
         return true
     }
 
-    private var closed: Boolean = true
+    internal var closed: Boolean = true
     private var clickCallback: (slot: Int, type: ClickType) -> Boolean = { _, _ -> true }
+
     val windowItems = arrayOfNulls<ItemStack?>(containerType.entireWindowSize)
+
+    fun updatePlayerItems(update: Boolean = false) {
+        if (hidePlayerInventory) return
+
+        windowItems.apply {
+            viewer.copyStorage().forEachIndexed { index, itemStack ->
+                val slot = containerSize + if (index < 9) index + 27 else index - 9
+                this[slot] = itemStack
+                if (update) update(slot)
+            }
+        }
+    }
 
     fun onClick(handler: (slot: Int, type: ClickType) -> Boolean): InventoryPacket {
         clickCallback = handler
@@ -51,7 +65,11 @@ class InventoryPacket(override val window: BukkitWindow) : ProxyBukkitInventory 
     }
 
     override fun set(slot: Int, itemStack: ItemStack?) {
-        windowItems[slot] = itemStack
+        try {
+            windowItems[slot] = itemStack
+        } catch (e: Throwable) {
+            println("Failed to set slot $slot to $itemStack")
+        }
         update(slot)
     }
 
@@ -61,8 +79,20 @@ class InventoryPacket(override val window: BukkitWindow) : ProxyBukkitInventory 
 
     override fun open() {
         closed = false
+        updatePlayerItems()
         handler.sendWindowOpen(viewer, persistContainerId, containerType, inventoryTitle)
         update()
+
+        // temp
+        if (!hidePlayerInventory) {
+            submitAsync(delay = 10L, period = 20L) {
+                if (!window.isViewing()) {
+                    cancel()
+                    return@submitAsync
+                }
+                updatePlayerItems(true)
+            }
+        }
     }
 
     fun handleClickEvent(slot: Int, type: ClickType) {

@@ -29,6 +29,7 @@ class FunctionalActionCatcher(
     val signLine: Int?,
     @Serializable(ListStringSerializer::class)
     val cancel: List<String>?,
+    val reopen: Boolean = true,
     val beforeInput: Action?,
     val afterInput: Action?,
     val onRepeat: Action?,
@@ -49,7 +50,7 @@ class FunctionalActionCatcher(
         submitAsync(delay = 2L) {
             inputCatcher.run(player, context) {
                 val pass = context.variables.filterNot { it.key.startsWith("@") }
-                if (menu != null)
+                if (reopen && menu != null)
                     Invero
                         .API
                         .getMenuManager()

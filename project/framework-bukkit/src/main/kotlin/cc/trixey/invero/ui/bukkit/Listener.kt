@@ -11,7 +11,6 @@ import org.bukkit.entity.Player
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.inventory.*
 import org.bukkit.event.player.PlayerChangedWorldEvent
-import org.bukkit.event.player.PlayerPickupItemEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.ItemStack
 import taboolib.common.LifeCycle
@@ -54,16 +53,31 @@ object Listener {
     fun e(e: InventoryDragEvent) = e.delegatedEvent { handleDrag(e) }
 
     @SubscribeEvent
-    fun e(e: InventoryOpenEvent) = e.delegatedEvent { handleOpenEvent(e) }
+    fun e(e: InventoryOpenEvent) {
+        if (!e.delegatedEvent { handleOpenEvent(e) }) {
+            (e.player as Player).updateInventory()
+        }
+    }
 
     @SubscribeEvent
     fun e(e: InventoryCloseEvent) = e.delegatedEvent { handleCloseEvent(e) }
+
+    @SubscribeEvent
+    fun e(e: PlayerQuitEvent) {
+        try {
+            e.player.viewer.viewingWindow()?.close(false, updateInventory = false)
+        } catch (_: Throwable) {
+
+        }
+    }
 
     private fun InventoryEvent.delegatedEvent(block: InventoryVanilla.() -> Unit) = view.topInventory.let {
         val holder = it.holder
         if (holder is InventoryVanilla.Holder) {
             (holder.window.inventory as InventoryVanilla).block()
+            return@let true
         }
+        return@let false
     }
 
     @SubscribeEvent
@@ -82,13 +96,22 @@ object Listener {
             }
 
             "PacketPlayInWindowClick" -> {
-                packet.read<Int>(FILEDS_WINDOW_CLICK[0]).let { if (it != persistContainerId) return }
-                val window = viewer.viewingPacketWindow() ?: return
+                val inventory = viewer.viewingWindow()?.inventory ?: return
+
+                if (inventory is InventoryVanilla && inventory.hidePlayerInventory) {
+                    player.sendCancelCoursor()
+                    submit { inventory.updatePlayerInventory() }
+                    return
+                } else {
+                    packet.read<Int>(FILEDS_WINDOW_CLICK[0]).let { if (it != persistContainerId) return }
+                    inventory as InventoryPacket
+                }
+
                 val rawSlot = packet.read<Int>(FILEDS_WINDOW_CLICK[1]) ?: return
                 val button = packet.read<Int>(FILEDS_WINDOW_CLICK[2]) ?: return
                 val mode = ClickType.Mode.valueOf(packet.read<Any>(FILEDS_WINDOW_CLICK[3]).toString())
                 val type = ClickType.find(mode, button, rawSlot) ?: return
-                val inventory = window.inventory as InventoryPacket
+
 
                 if (rawSlot >= 0) {
                     player.sendCancelCoursor()
@@ -111,19 +134,12 @@ object Listener {
     @SubscribeEvent
     fun e(e: PlayerChangedWorldEvent) = e.player.windowClosure()
 
-    @SubscribeEvent
-    fun e(e: PlayerQuitEvent) = e.player.windowClosure()
-
-    @Suppress("DEPRECATION", "For better compatibility")
-    @SubscribeEvent
-    fun e(e: PlayerPickupItemEvent) {
-        if (findWindow(e.player.name) != null) {
-            e.isCancelled = true
-        }
+    private fun PlayerViewer.viewingPacketWindow(): BukkitWindow? {
+        return viewingWindow()?.let { if (it.inventory is InventoryPacket) it else null }
     }
 
-    private fun PlayerViewer.viewingPacketWindow(): BukkitWindow? {
-        return findWindow(name)?.let { if (it.inventory is InventoryPacket) it else null }
+    private fun PlayerViewer.viewingWindow(): BukkitWindow? {
+        return findWindow(name)
     }
 
     private fun Player.windowClosure() {
