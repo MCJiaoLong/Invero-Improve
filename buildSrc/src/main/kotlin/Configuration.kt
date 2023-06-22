@@ -2,10 +2,10 @@ import java.text.SimpleDateFormat
 
 const val rootName = "Invero"
 const val rootGroup = "cc.trixey.invero"
-const val rootVersion = "1.0.8-pre-1"
+const val rootVersion = "1.0.8-pre-1-fixed"
 
 const val kotlinVersion = "1.8.20"
-const val shadowJarVersion = "8.1.0"
+const val shadowJarVersion = "8.1.1"
 const val taboolibPluginVersion = "1.56"
 
 val taboolibVersion = taboolibLatestVersion.also { println("Using taboolib-version = $it") }
@@ -30,12 +30,12 @@ val usedTaboolibModules = setOf(
 )
 
 val usedAdventureModules = setOf(
-    "net.kyori:adventure-api:4.12.0",
-    "net.kyori:adventure-platform-api:4.2.0",
-    "net.kyori:adventure-platform-bukkit:4.2.0",
-    "net.kyori:adventure-platform-facet:4.2.0",
-    "net.kyori:adventure-text-minimessage:4.12.0",
-    "net.kyori:adventure-text-serializer-gson:4.2.0",
-    "net.kyori:adventure-text-serializer-bungeecord:4.2.0",
-    "net.kyori:adventure-text-serializer-legacy:4.2.0"
+    "net.kyori:adventure-api:4.14.0",
+    "net.kyori:adventure-platform-api:4.3.0",
+    "net.kyori:adventure-platform-bukkit:4.3.0",
+    "net.kyori:adventure-platform-facet:4.3.0",
+    "net.kyori:adventure-text-minimessage:4.14.0",
+    "net.kyori:adventure-text-serializer-gson:4.14.0",
+    "net.kyori:adventure-text-serializer-bungeecord:4.3.0",
+    "net.kyori:adventure-text-serializer-legacy:4.14.0"
 )

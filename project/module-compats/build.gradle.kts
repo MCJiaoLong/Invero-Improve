@@ -17,8 +17,8 @@ dependencies {
     compileModule("module-common")
     compileModule("module-core")
     compileOnly("com.github.oraxen:oraxen:-SNAPSHOT")
-    compileOnly("ink.ptms.adyeshach:all:2.0.0-snapshot-12")
+    compileOnly("ink.ptms.adyeshach:all:2.0.0-snapshot-28")
     compileOnly("ink.ptms:Zaphkiel:2.0.14")
     compileOnly("org.black_ixx:playerpoints:3.1.1")
-    compileOnly("com.github.FrancoBM12:API-MagicCosmetics:2.1.9")
+    compileOnly("com.github.FrancoBM12:API-MagicCosmetics:2.2.2")
 }
